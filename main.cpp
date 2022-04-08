@@ -25,8 +25,97 @@
 
 using namespace std;
 
+/// functions
+void add_phone(string name, string brand, int stock);
+int search(string name, string brand);
+void change_mobile_info();
+void remove(int index);
+void most_sold_item();
+void sort_by_price();
+void sell_a_mobile();
+
+
 int main()
 {
     return 0;
 
 }
+
+/**
+ * Add mobile to mobiles array.
+ *
+ * @param name
+ * @param brand
+ * @param stock
+ *
+ * @return void
+ */
+void add_phone(string name, string brand, int stock) {
+
+}
+
+/**
+ * Remove mobile with index.
+ * then shrink mobiles array
+ *
+ * @param index of mobiles array.
+ *
+ * @return void
+ */
+void remove(int index) {
+
+}
+
+/**
+ * Find mobile with name and brand.
+ *
+ * @param name
+ * @param brand
+ *
+ * @return index of `mobile`, or -1 if there was no mobile.
+ */
+int search(string name, string brand) {
+
+}
+
+/**
+ * Sort mobiles array by price.
+ * without duplicate array
+ */
+void sort_by_price() {
+
+}
+
+/**
+ * Change detail of mobile.
+ *
+ * @param name
+ * @param brand
+ *
+ * @return index of `phone`, or -1 if there was no phone.
+ */
+void change_mobile_info() {
+
+}
+
+/**
+ * Change detail of mobile.
+ *
+ * @param name
+ * @param brand
+ */
+void sell_a_mobile() {
+
+}
+
+/**
+ * Print mobiles detail sorted by sell.
+ *
+ */
+void most_sold_item() {
+
+}
+
+
+
+
