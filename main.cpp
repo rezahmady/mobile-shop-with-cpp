@@ -35,23 +35,20 @@ struct Mobile
     int stock;
     int price;
     int sell;
+
 };
 
 /// functions
-void add_phone(Mobile *phones, int size);
-int  search(string name, string brand, Mobile *phones);
+int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
 void print_phones(Mobile *phones, int size);
+void add_phone(Mobile *phones, int size);
+void cout_menu(Mobile *phones, int size);
 void change_mobile_info(Mobile *phones);
 void remove(int index, Mobile *phones);
 void most_sold_item(Mobile *phones);
 void sort_by_price(Mobile *phones);
 void sell_a_mobile(Mobile *phones);
-void cout_menu(Mobile *phones, int size);
-
-
-
-
 
 int main()
 {
@@ -91,6 +88,26 @@ void add_phone(Mobile *phones, int size) {
 
     cout << "Enter the phone brand :" << endl;
     cin >> brand;
+
+    /// Check for the absence of a mobile in the `phones` array
+    /// with this `name` and `brand` in advance
+    int phone_index = search(name, brand, phones, size);
+    while(phone_index != -1)
+    {
+        cin.clear();
+        cin.ignore();
+
+        cout << "error : Mobile with these specifications already added. Enter new information" << endl;
+        cout << "Enter the phone name :" << endl;
+        cin >> name;
+
+        cout << "Enter the phone brand :" << endl;
+        cin >> brand;
+
+        cout << "name :" << name << " brand :" << brand << endl;
+
+        phone_index = search(name, brand, phones, size);
+    }
 
     cout << "Enter the phone stock :" << endl;
     cin >> stock;
@@ -145,8 +162,15 @@ void remove(int index, Mobile *phones) {
  *
  * @return index of `phone`, or -1 if there was no `phone`.
  */
-int search(string name, string brand, Mobile *phones) {
-
+int search(string name, string brand, Mobile *phones, int size) {
+    int index = -1;
+    for(int i=0; i<size; i++) {
+        if((phones[i].name == name) && (phones[i].brand == brand)) {
+            index = i;
+            break;
+        }
+    }
+    return index;
 }
 
 /**
