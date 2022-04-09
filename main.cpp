@@ -45,7 +45,7 @@ void print_phones(Mobile *phones, int size);
 void add_phone(Mobile *phones, int size);
 void cout_menu(Mobile *phones, int size);
 void change_mobile_info(Mobile *phones);
-void remove(int index, Mobile *phones);
+void remove_phone(string name, string brand, Mobile *phones, int size);
 void most_sold_item(Mobile *phones);
 void sort_by_price(Mobile *phones);
 void sell_a_mobile(Mobile *phones);
@@ -143,14 +143,43 @@ void add_phone(Mobile *phones, int size) {
 }
 
 /**
- * Remove `phone` with index.
+ * Remove `phone`.
  * then shrink `phones` array
  *
  * @param index of `phones` array.
  *
  * @return void
  */
-void remove(int index, Mobile *phones) {
+void remove_phone(string name, string brand, Mobile *phones,int size) {
+
+    /// check phone exists
+    int index = search(name, brand, phones, size);
+
+    if(index == -1) {
+        cout << "error : phone not found." << endl;
+        return cout_menu(phones, size);
+    }
+
+    /// remove phone
+    /// Shifting mobiles to the left in the right position
+    /// relative to the removed mobile position
+    for (int i = index + 1; i < size; ++i) {
+        phones[i - 1] = phones[i];
+    }
+
+    /// shrink array
+    Mobile *old_phones = phones;
+    size -= 1;
+    phones = new Mobile[size];
+    for(int i=0; i<size; i++) {
+        phones[i] = old_phones[i];
+    }
+    old_phones = NULL;
+    delete old_phones;
+
+    /// print message
+    cout << "phone `" << name << "|" << brand << "` deleted successfully." << endl;
+    return cout_menu(phones, size);
 
 }
 
@@ -273,14 +302,23 @@ void handle_menu(int menu, Mobile *phones, int size) {
         case 1:
             return add_phone(phones, size);
         case 2:
-            // code block
-            break;
+            {
+                string name, brand;
+                cout << "Enter the phone name :" << endl;
+                cin >> name;
+
+                cout << "Enter the phone brand :" << endl;
+                cin >> brand;
+
+                return remove_phone(name, brand, phones, size );
+            }
         case 3:
             // code block
             break;
         case 4:
-            // code block
-            break;
+            {
+                //
+            }
         case 5:
             // code block
             break;
