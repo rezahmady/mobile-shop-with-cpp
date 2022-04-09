@@ -1,4 +1,6 @@
 # depslib dependency file v1.0
-1649414046 source:d:\projects\c++\mobile_shop_with_cpp\main.cpp
+1649509695 source:d:\projects\c++\mobile_shop_with_cpp\main.cpp
 	<iostream>
+	<limits>
+	<string>
 

@@ -22,24 +22,52 @@
  */
 
 #include <iostream>
+#include <limits>
+#include<string>
 
 using namespace std;
 
+#define MAX_PHONES 1000
+struct Mobile
+{
+    string name;
+    string brand;
+    int stock;
+    int price;
+    int sell;
+};
+
 /// functions
-void add_phone(string name, string brand, int stock);
-int  search(string name, string brand);
-void handle_menu(int menu);
-void change_mobile_info();
-void remove(int index);
-void most_sold_item();
-void sort_by_price();
-void sell_a_mobile();
-void cout_menu();
+void add_phone(Mobile *phones, int size);
+int  search(string name, string brand, Mobile *phones);
+void handle_menu(int menu, Mobile *phones, int size);
+void print_phones(Mobile *phones, int size);
+void change_mobile_info(Mobile *phones);
+void remove(int index, Mobile *phones);
+void most_sold_item(Mobile *phones);
+void sort_by_price(Mobile *phones);
+void sell_a_mobile(Mobile *phones);
+void cout_menu(Mobile *phones, int size);
+
+
+
 
 
 int main()
 {
-    cout_menu();
+    int size = 0;
+    int *s = nullptr;
+
+    /// call menu
+    Mobile *phones ;
+    cout_menu(phones, size);
+
+    /// delete pointers
+    phones = NULL;
+    delete phones;
+    delete s;
+
+    /// return
     return 0;
 }
 
@@ -52,9 +80,49 @@ int main()
  *
  * @return void
  */
-void add_phone(string name, string brand, int stock) {
+void add_phone(Mobile *phones, int size) {
 
-    return cout_menu();
+    /// get phone detail from user
+    string name, brand;
+    int stock;
+
+    cout << "Enter the phone name :" << endl;
+    cin >> name;
+
+    cout << "Enter the phone brand :" << endl;
+    cin >> brand;
+
+    cout << "Enter the phone stock :" << endl;
+    cin >> stock;
+
+    /// validate stock input . must be intiger
+    while (!std::cin.good())
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+
+        cout << "error : stock must be number" << endl << "Enter the phone stock correctly:" << endl;
+        cin >> stock;
+    }
+
+    /// add new phone in `phones` array
+
+    if(size == 0) {
+        phones = new Mobile[1];
+        phones[0] = {name, brand, stock, 0, 0};
+        size +=1;
+    } else {
+        Mobile *old_phones = phones;
+        phones = new Mobile[size+1];
+        for (int i=0; i < size; i++) {
+            phones[i] = old_phones[i];
+        }
+        phones[size] = {name, brand, stock, 0, 0};
+        size +=1;
+        delete[] old_phones;
+    }
+
+    return cout_menu(phones, size);
 }
 
 /**
@@ -65,7 +133,7 @@ void add_phone(string name, string brand, int stock) {
  *
  * @return void
  */
-void remove(int index) {
+void remove(int index, Mobile *phones) {
 
 }
 
@@ -77,7 +145,7 @@ void remove(int index) {
  *
  * @return index of `phone`, or -1 if there was no `phone`.
  */
-int search(string name, string brand) {
+int search(string name, string brand, Mobile *phones) {
 
 }
 
@@ -85,7 +153,7 @@ int search(string name, string brand) {
  * Sort `phones` array by price.
  * without duplicate array
  */
-void sort_by_price() {
+void sort_by_price(Mobile *phones) {
 
 }
 
@@ -95,7 +163,7 @@ void sort_by_price() {
  * @param name
  * @param brand
  */
-void change_mobile_info() {
+void change_mobile_info(Mobile *phones) {
 
 }
 
@@ -105,32 +173,60 @@ void change_mobile_info() {
  * @param name
  * @param brand
  */
-void sell_a_mobile() {
+void sell_a_mobile(Mobile *phones) {
 
+}
+
+
+/**
+ * Print `phones` array.
+ *
+ */
+void print_phones(Mobile *phones, int size) {
+
+    /// Check there is a `phone`
+    if(size) {
+
+        /// print array in readable format
+        for (int j=0;j< size; j++) {
+            cout << "-----------------------"             << endl;
+            cout <<  "::" << j << "::"                    << endl;
+            cout << "name  "  << " | " << phones[j].name  << endl;
+            cout << "brand "  << " | " << phones[j].brand << endl;
+            cout << "stock "  << " | " << phones[j].stock << endl;
+            cout << "price "  << " | " << phones[j].price << endl;
+            cout << "-----------------------"             << endl;
+        }
+
+    } else {
+        cout << "Phone has not been added yet." << endl;
+    }
+
+    return cout_menu(phones, size);
 }
 
 /**
  * Print `phones` detail sorted by sell.
  *
  */
-void most_sold_item() {
+void most_sold_item(Mobile *phones) {
 
 }
 
-void cout_menu() {
+void cout_menu(Mobile *phones, int size) {
 
     int menu;
 
     /// print menu for user
-    cout << "1- Add a phone" << endl;
-    cout << "2- Remove phone" << endl;
-    cout << "3- Sort phones by price" << endl;
-    cout << "4- Search a phone" << endl;
-    cout << "5- Change phone info" << endl;
-    cout << "6- Sell a phone" << endl;
-    cout << "7- Print phones" << endl;
-    cout << "8- Print phones sorted by the most sold to the least" << endl;
-    cout << "9- Quit" << endl;
+    cout << "[1] Add a phone" << endl;
+    cout << "[2] Remove phone" << endl;
+    cout << "[3] Sort phones by price" << endl;
+    cout << "[4] Search a phone" << endl;
+    cout << "[5] Change phone info" << endl;
+    cout << "[6] Sell a phone" << endl;
+    cout << "[7] Print phones" << endl;
+    cout << "[8] Print phones sorted by the most sold to the least" << endl;
+    cout << "[9] Quit" << endl;
     cin >> menu;
 
     /// prepare for next use
@@ -138,7 +234,7 @@ void cout_menu() {
     std::cin.ignore();
 
     /// Perform the action associated with each menu item
-    return handle_menu(menu);
+    return handle_menu(menu, phones, size);
 }
 
 /**
@@ -147,27 +243,11 @@ void cout_menu() {
  *
  * @param menu
  */
-void handle_menu(int menu) {
+void handle_menu(int menu, Mobile *phones, int size) {
 
     switch(menu) {
         case 1:
-            {
-                /// get phone detail from user
-                string name, brand;
-                int stock;
-
-                cout << "Enter the phone name" << endl;
-                cin >> name;
-
-                cout << "Enter the phone brand" << endl;
-                cin >> brand;
-
-                cout << "Enter the phone stock" << endl;
-                cin >> stock;
-
-                /// call function
-                return add_phone(name, brand, stock);
-            }
+            return add_phone(phones, size);
         case 2:
             // code block
             break;
@@ -184,22 +264,24 @@ void handle_menu(int menu) {
             // code block
             break;
         case 7:
-            // code block
+            return print_phones(phones, size);
             break;
         case 8:
             // code block
             break;
         case 9:
-            cout << "The End ...." << endl;
+            cout << "<<<<--THANK YOU-->>>>" << endl;
             break;
         default:
             {
                 cout << "The value entered is incorrect. Please enter the menu number carefully" << endl;
-                return cout_menu();
+                return cout_menu(phones, size);
             }
     }
 
 }
+
+
 
 
 
