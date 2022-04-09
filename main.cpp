@@ -317,7 +317,29 @@ void handle_menu(int menu, Mobile *phones, int size) {
             break;
         case 4:
             {
-                //
+                string name, brand;
+                cout << "Enter the phone name :" << endl;
+                cin >> name;
+
+                cout << "Enter the phone brand :" << endl;
+                cin >> brand;
+
+                int index = search(name, brand, phones, size );
+
+                if(index == -1)
+                    cout << "error : phone not found." << endl;
+                else{
+                    cout << "-----------------------"                 << endl;
+                    cout <<  "::" << index << "::"                    << endl;
+                    cout << "name  "  << " | " << phones[index].name  << endl;
+                    cout << "brand "  << " | " << phones[index].brand << endl;
+                    cout << "stock "  << " | " << phones[index].stock << endl;
+                    cout << "price "  << " | " << phones[index].price << endl;
+                    cout << "-----------------------"                 << endl;
+                }
+
+                return cout_menu(phones, size);
+
             }
         case 5:
             // code block
