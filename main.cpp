@@ -39,6 +39,7 @@ struct Mobile
 };
 
 /// functions
+void print_a_phone(string name, string brand, Mobile *phones, int size);
 int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
 void print_phones(Mobile *phones, int size);
@@ -48,7 +49,7 @@ void change_mobile_info(Mobile *phones);
 void remove_phone(string name, string brand, Mobile *phones, int size);
 void most_sold_item(Mobile *phones);
 void sort_by_price(Mobile *phones);
-void sell_a_mobile(Mobile *phones);
+void sell_a_mobile(Mobile *phones, int size);
 
 int main()
 {
@@ -112,7 +113,7 @@ void add_phone(Mobile *phones, int size) {
     cout << "Enter the phone stock :" << endl;
     cin >> stock;
 
-    /// validate stock input . must be intiger
+    /// validate stock input . must be integer
     while (!std::cin.good())
     {
         cin.clear();
@@ -226,8 +227,27 @@ void change_mobile_info(Mobile *phones) {
  * @param name
  * @param brand
  */
-void sell_a_mobile(Mobile *phones) {
+void sell_a_mobile(Mobile *phones, int size) {
+    /// get detail from user
+    string name, brand;
+    cout << "Enter the phone name :" << endl;
+    cin >> name;
 
+    cout << "Enter the phone brand :" << endl;
+    cin >> brand;
+
+    int index = search(name, brand, phones, size );
+
+    if(index == -1) {
+        cout << "error : phone not found." << endl;
+        return cout_menu(phones, size);
+    }
+    else{
+        phones[index].stock -= 1;
+        phones[index].sell += 1;
+        cout << "Sales were registered successfully." << endl;
+        return print_a_phone(name, brand, phones, size);
+    }
 }
 
 
@@ -248,9 +268,39 @@ void print_phones(Mobile *phones, int size) {
             cout << "brand "  << " | " << phones[j].brand << endl;
             cout << "stock "  << " | " << phones[j].stock << endl;
             cout << "price "  << " | " << phones[j].price << endl;
+            cout << "sell  "  << " | " << phones[j].sell  << endl;
             cout << "-----------------------"             << endl;
         }
 
+    } else {
+        cout << "Phone has not been added yet." << endl;
+    }
+
+    return cout_menu(phones, size);
+}
+
+/**
+ * Print a `phone`.
+ *
+ */
+void print_a_phone(string name, string brand, Mobile *phones, int size) {
+
+    /// Check there is a `phone`
+    if(size) {
+        int index = search(name, brand, phones, size );
+
+        if(index == -1)
+            cout << "error : phone not found." << endl;
+        else{
+            cout << "-----------------------"                 << endl;
+            cout <<  "::" << index << "::"                    << endl;
+            cout << "name  "  << " | " << phones[index].name  << endl;
+            cout << "brand "  << " | " << phones[index].brand << endl;
+            cout << "stock "  << " | " << phones[index].stock << endl;
+            cout << "price "  << " | " << phones[index].price << endl;
+            cout << "sell  "  << " | " << phones[index].sell  << endl;
+            cout << "-----------------------"                 << endl;
+        }
     } else {
         cout << "Phone has not been added yet." << endl;
     }
@@ -310,13 +360,14 @@ void handle_menu(int menu, Mobile *phones, int size) {
                 cout << "Enter the phone brand :" << endl;
                 cin >> brand;
 
-                return remove_phone(name, brand, phones, size );
+                return remove_phone(name, brand, phones, size);
             }
         case 3:
             // code block
             break;
         case 4:
             {
+                /// get data from  user
                 string name, brand;
                 cout << "Enter the phone name :" << endl;
                 cin >> name;
@@ -324,29 +375,14 @@ void handle_menu(int menu, Mobile *phones, int size) {
                 cout << "Enter the phone brand :" << endl;
                 cin >> brand;
 
-                int index = search(name, brand, phones, size );
-
-                if(index == -1)
-                    cout << "error : phone not found." << endl;
-                else{
-                    cout << "-----------------------"                 << endl;
-                    cout <<  "::" << index << "::"                    << endl;
-                    cout << "name  "  << " | " << phones[index].name  << endl;
-                    cout << "brand "  << " | " << phones[index].brand << endl;
-                    cout << "stock "  << " | " << phones[index].stock << endl;
-                    cout << "price "  << " | " << phones[index].price << endl;
-                    cout << "-----------------------"                 << endl;
-                }
-
-                return cout_menu(phones, size);
-
+                /// search and print phone
+                return print_a_phone(name, brand, phones, size);
             }
         case 5:
             // code block
             break;
         case 6:
-            // code block
-            break;
+            return sell_a_mobile(phones, size);
         case 7:
             return print_phones(phones, size);
             break;
