@@ -31,10 +31,12 @@ void remove_phone(string name, string brand, Mobile *phones, int size);
 int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
 void change_mobile_info(Mobile *phones, int size);
+void load_from_file(Mobile *phones, int size);
 void most_sold_item(Mobile *phones, int size);
 void sort_by_price(Mobile *phones, int size);
 void sell_a_mobile(Mobile *phones, int size);
 void print_phones(Mobile *phones, int size);
+void save_to_file(Mobile *phones, int size);
 void add_phone(Mobile *phones, int size);
 void cout_menu(Mobile *phones, int size);
 
@@ -57,11 +59,36 @@ int main()
 }
 
 /**
+ * Save `phones` array in text file.
+ *
+ * @param phones
+ * @param size
+ *
+ * @return void
+ */
+void save_to_file(Mobile *phones, int size)
+{
+    //
+}
+
+/**
+ * load `phones` array from text file.
+ *
+ * @param phones
+ * @param size
+ *
+ * @return void
+ */
+void load_from_file(Mobile *phones, int size)
+{
+    //
+}
+
+/**
  * Add `phone` to `phones` array.
  *
- * @param name
- * @param brand
- * @param stock
+ * @param phones
+ * @param size
  *
  * @return void
  */
@@ -134,7 +161,11 @@ void add_phone(Mobile *phones, int size) {
  * Remove `phone`.
  * then shrink `phones` array
  *
- * @param index of `phones` array.
+ * @param name
+ * @param brand
+ * @param stock
+ * @param phones
+ * @param size
  *
  * @return void
  */
@@ -176,6 +207,8 @@ void remove_phone(string name, string brand, Mobile *phones,int size) {
  *
  * @param name
  * @param brand
+ * @param phones
+ * @param size
  *
  * @return index of `phone`, or -1 if there was no `phone`.
  */
@@ -195,6 +228,9 @@ int search(string name, string brand, Mobile *phones, int size) {
 /**
  * Sort `phones` array by price.
  * without duplicate array
+ *
+ * @param phones
+ * @param size
  */
 void sort_by_price(Mobile *phones, int size) {
 
@@ -230,8 +266,8 @@ void sort_by_price(Mobile *phones, int size) {
 /**
  * Change detail of `phone`.
  *
- * @param name
- * @param brand
+ * @param phones
+ * @param size
  */
 void change_mobile_info(Mobile *phones, int size) {
 
@@ -240,8 +276,8 @@ void change_mobile_info(Mobile *phones, int size) {
 /**
  * Change detail of `phone`.
  *
- * @param name
- * @param brand
+ * @param phones
+ * @param size
  */
 void sell_a_mobile(Mobile *phones, int size) {
     /// get detail from user
@@ -270,6 +306,8 @@ void sell_a_mobile(Mobile *phones, int size) {
 /**
  * Print `phones` array.
  *
+ * @param phones
+ * @param size
  */
 void print_phones(Mobile *phones, int size) {
 
@@ -295,6 +333,12 @@ void print_phones(Mobile *phones, int size) {
 
 /**
  * Print a `phone`.
+ *
+ * @param name
+ * @param brand
+ * @param stock * @param name
+ * @param brand
+ * @param stock
  *
  */
 void print_a_phone(string name, string brand, Mobile *phones, int size) {
@@ -325,6 +369,8 @@ void print_a_phone(string name, string brand, Mobile *phones, int size) {
 /**
  * Print `phones` detail sorted by sell.
  *
+ * @param phones
+ * @param size
  */
 void most_sold_item(Mobile *phones, int size) {
     Mobile *sorted_by_sold = phones;
@@ -369,6 +415,8 @@ void most_sold_item(Mobile *phones, int size) {
 /**
  * Print main menu.
  *
+ * @param phones
+ * @param size
  */
 void cout_menu(Mobile *phones, int size) {
 
@@ -399,6 +447,8 @@ void cout_menu(Mobile *phones, int size) {
  * Call suitable function
  *
  * @param menu
+ * @param phones
+ * @param size
  */
 void handle_menu(int menu, Mobile *phones, int size) {
 
