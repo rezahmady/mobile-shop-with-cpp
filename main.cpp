@@ -1,21 +1,8 @@
 /*
  * This file is part of mobile_shop_with_cpp.
  *
- * Developed for the LSST Data Management System.
- * This product includes software developed by the LSST Project
- * (https://www.lsst.org).
- * See the COPYRIGHT file at the top-level directory of this distribution
- * for details of code ownership.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Author : Reza ahmadi sabzevar <ahmadireza15@gmail.com>
+ * Github link : https://github.com/rezahmady/mobile-shop-with-cpp
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
@@ -27,7 +14,6 @@
 
 using namespace std;
 
-#define MAX_PHONES 1000
 struct Mobile
 {
     string name;
@@ -39,17 +25,18 @@ struct Mobile
 };
 
 /// functions
+bool compareTwoPhonesBySell(Mobile a, Mobile b, Mobile *phones, int size);
 void print_a_phone(string name, string brand, Mobile *phones, int size);
+void remove_phone(string name, string brand, Mobile *phones, int size);
 int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
+void change_mobile_info(Mobile *phones, int size);
+void most_sold_item(Mobile *phones, int size);
+void sort_by_price(Mobile *phones, int size);
+void sell_a_mobile(Mobile *phones, int size);
 void print_phones(Mobile *phones, int size);
 void add_phone(Mobile *phones, int size);
 void cout_menu(Mobile *phones, int size);
-void change_mobile_info(Mobile *phones);
-void remove_phone(string name, string brand, Mobile *phones, int size);
-void most_sold_item(Mobile *phones);
-void sort_by_price(Mobile *phones);
-void sell_a_mobile(Mobile *phones, int size);
 
 int main()
 {
@@ -65,7 +52,7 @@ int main()
     delete phones;
     delete s;
 
-    /// return
+    /// End program without any error :)
     return 0;
 }
 
@@ -203,12 +190,41 @@ int search(string name, string brand, Mobile *phones, int size) {
     return index;
 }
 
+
+
 /**
  * Sort `phones` array by price.
  * without duplicate array
  */
-void sort_by_price(Mobile *phones) {
+void sort_by_price(Mobile *phones, int size) {
 
+    Mobile temp;
+    int i,j;
+
+    bool swapped = false;
+
+    /// loop through all numbers
+    if(size > 1) for(i = 0; i < size-1; i++) {
+        swapped = false;
+
+        /// loop through numbers falling ahead
+        for(j = 0; j < size-1-i; j++) {
+            if(phones[j].price < phones[j+1].price) {
+                temp = phones[j];
+                phones[j] = phones[j+1];
+                phones[j+1] = temp;
+                swapped = true;
+            }
+        }
+
+        /// if no number was swapped that means
+        /// array is sorted now, break the loop.
+        if(!swapped) {
+            break;
+        }
+    }
+    cout << "all phones sorted by price successfully." << endl;
+    return cout_menu(phones, size);
 }
 
 /**
@@ -217,7 +233,7 @@ void sort_by_price(Mobile *phones) {
  * @param name
  * @param brand
  */
-void change_mobile_info(Mobile *phones) {
+void change_mobile_info(Mobile *phones, int size) {
 
 }
 
@@ -275,8 +291,6 @@ void print_phones(Mobile *phones, int size) {
     } else {
         cout << "Phone has not been added yet." << endl;
     }
-
-    return cout_menu(phones, size);
 }
 
 /**
@@ -312,10 +326,50 @@ void print_a_phone(string name, string brand, Mobile *phones, int size) {
  * Print `phones` detail sorted by sell.
  *
  */
-void most_sold_item(Mobile *phones) {
+void most_sold_item(Mobile *phones, int size) {
+    Mobile *sorted_by_sold = phones;
 
+    Mobile temp;
+    int i,j;
+
+    bool swapped = false;
+
+    /// loop through all numbers
+    if(size > 1) for(i = 0; i < size-1; i++) {
+        swapped = false;
+
+        /// loop through numbers falling ahead
+        for(j = 0; j < size-1-i; j++) {
+            if(sorted_by_sold[j].sell < sorted_by_sold[j+1].sell) {
+                temp = sorted_by_sold[j];
+                sorted_by_sold[j] = sorted_by_sold[j+1];
+                sorted_by_sold[j+1] = temp;
+                swapped = true;
+            }
+        }
+
+        /// if no number was swapped that means
+        /// array is sorted now, break the loop.
+        if(!swapped) {
+            break;
+        }
+    }
+
+    /// print phones sorted by sell
+    print_phones(sorted_by_sold, size);
+
+    /// delete extra pointer
+    sorted_by_sold = NULL;
+    delete sorted_by_sold;
+
+    /// print main menu
+    return cout_menu(phones, size);
 }
 
+/**
+ * Print main menu.
+ *
+ */
 void cout_menu(Mobile *phones, int size) {
 
     int menu;
@@ -363,8 +417,7 @@ void handle_menu(int menu, Mobile *phones, int size) {
                 return remove_phone(name, brand, phones, size);
             }
         case 3:
-            // code block
-            break;
+            return sort_by_price(phones, size);
         case 4:
             {
                 /// get data from  user
@@ -384,10 +437,15 @@ void handle_menu(int menu, Mobile *phones, int size) {
         case 6:
             return sell_a_mobile(phones, size);
         case 7:
-            return print_phones(phones, size);
-            break;
+            {
+                /// print all phones
+                print_phones(phones, size);
+
+                /// print main menu
+                return cout_menu(phones, size);
+            }
         case 8:
-            // code block
+            return most_sold_item(phones, size);
             break;
         case 9:
             cout << "<<<<--THANK YOU-->>>>" << endl;
