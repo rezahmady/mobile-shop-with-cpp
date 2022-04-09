@@ -11,32 +11,59 @@
 #include <iostream>
 #include <limits>
 #include<string>
+#include <fstream>
+#include <algorithm>
 
 using namespace std;
 
+
+// enums
+enum class OS
+{
+    ios, Android, Windows phone
+};
+
+enum class Ram
+{
+    2GB, 4GB, 6GB, 8GB, 12GB, 16GB, 32GB
+};
+
+enum class Storage
+{
+    16GB, 32GB, 64GB, 128GB, 256GB, 512GB, 1TB, 2TB
+};
+
+enum class Color
+{
+    Black, Gray, Green, Blue, White, Red, Yellow
+};
+
+// Mobile Structure
 struct Mobile
 {
     string name;
     string brand;
-    int stock;
+    enum OS;
+    enum Ram;
+    enum Storage;
     int price;
+    int stock;
     int sell;
-
 };
 
-/// functions
+// functions
 bool compareTwoPhonesBySell(Mobile a, Mobile b, Mobile *phones, int size);
 void print_a_phone(string name, string brand, Mobile *phones, int size);
 void remove_phone(string name, string brand, Mobile *phones, int size);
 int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
 void change_mobile_info(Mobile *phones, int size);
-void load_from_file(Mobile *phones, int size);
+void save_into_a_file(Mobile *phones, int size);
+void load_from_a_file(Mobile *phones, int size);
 void most_sold_item(Mobile *phones, int size);
 void sort_by_price(Mobile *phones, int size);
 void sell_a_mobile(Mobile *phones, int size);
 void print_phones(Mobile *phones, int size);
-void save_to_file(Mobile *phones, int size);
 void add_phone(Mobile *phones, int size);
 void cout_menu(Mobile *phones, int size);
 
@@ -47,7 +74,7 @@ int main()
 
     /// call menu
     Mobile *phones ;
-    cout_menu(phones, size);
+    load_from_a_file(phones, size);
 
     /// delete pointers
     phones = NULL;
@@ -66,9 +93,25 @@ int main()
  *
  * @return void
  */
-void save_to_file(Mobile *phones, int size)
+void save_into_a_file(Mobile *phones, int size)
 {
-    //
+    ofstream myfile ("phones.txt");
+    if (myfile.is_open())
+    {
+        if(size > 0) {
+            myfile << size << endl;
+            for(int row = 0; row < size; row ++){
+                myfile << phones[row].name  << "\t" ;
+                myfile << phones[row].brand << "\t" ;
+                myfile << phones[row].stock << "\t" ;
+                myfile << phones[row].price << "\t" ;
+                myfile << phones[row].sell  << "\t" ;
+                myfile << endl ;
+            }
+        }
+        myfile.close();
+    }
+    else cout << "Unable to open file";
 }
 
 /**
@@ -79,9 +122,32 @@ void save_to_file(Mobile *phones, int size)
  *
  * @return void
  */
-void load_from_file(Mobile *phones, int size)
+void load_from_a_file(Mobile *phones, int size)
 {
-    //
+    ifstream myfile("phones.txt");
+    if (!myfile.is_open()) {
+        cout << "Unable to open file";
+        return cout_menu(phones, size);
+    }
+
+    myfile >> size;
+    phones = new Mobile[size];
+
+    // loop until we reach the end of file, or until we hit size records,
+    // whichever comes first
+    for (int i=0; i<size; i++)
+    {
+        myfile
+          >> phones[i].name
+          >> phones[i].brand
+          >> phones[i].stock
+          >> phones[i].price
+          >> phones[i].sell ;
+    }
+
+    myfile.close();
+
+    cout_menu(phones, size);
 }
 
 /**
@@ -498,8 +564,12 @@ void handle_menu(int menu, Mobile *phones, int size) {
             return most_sold_item(phones, size);
             break;
         case 9:
-            cout << "<<<<--THANK YOU-->>>>" << endl;
-            break;
+            {
+                save_into_a_file(phones, size);
+                cout << "<<<<--THANK YOU-->>>>" << endl;
+                break;
+            }
+
         default:
             {
                 cout << "The value entered is incorrect. Please enter the menu number carefully" << endl;
