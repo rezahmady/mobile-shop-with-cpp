@@ -121,12 +121,11 @@ string Mobile::display_storage() {
 
 // display readable value for Color
 string Mobile::display_color() {
-    string labels[9] = {"-", "Black", "Gray", "Green", "Blue", "White", "Red", "Yellow"};
+    string labels[8] = {"-", "Black", "Gray", "Green", "Blue", "White", "Red", "Yellow"};
     return labels[color];
 }
 
 // functions
-bool compareTwoPhonesBySell(Mobile a, Mobile b, Mobile *phones, int size);
 void remove_phone(string name, string brand, Mobile *phones, int size);
 int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
@@ -147,7 +146,7 @@ void cout_menu(Mobile *phones, int size);
  */
 int main()
 {
-    // initials size of phones array
+    // initialise size of phones array
     // It basically stores the number of phones
     int size = 0;
     int *s = nullptr;
@@ -219,6 +218,7 @@ void load_from_a_file(Mobile *phones, int size)
         return cout_menu(phones, size);
     }
 
+    // set array size from first line in file
     myfile >> size;
     phones = new Mobile[size];
 
@@ -289,8 +289,6 @@ void add_phone(Mobile *phones, int size) {
         cout << "Enter the phone brand :" << endl;
         cin >> brand;
 
-        cout << "name :" << name << " brand :" << brand << endl;
-
         phone_index = search(name, brand, phones, size);
     }
 
@@ -308,7 +306,6 @@ void add_phone(Mobile *phones, int size) {
     }
 
     // add new phone in `phones` array
-
     if(size == 0) {
         phones = new Mobile[1];
         phones[0].name = name;
@@ -322,12 +319,19 @@ void add_phone(Mobile *phones, int size) {
         phones[0].color = Color::C_NULL;
         size +=1;
     } else {
-        Mobile *old_phones = phones;
+
+        // save previous array in temporary array
+        Mobile *temp_phones = phones;
+
+        // create new array with new size
         phones = new Mobile[size+1];
+
+        // push previous phones in new array
         for (int i=0; i < size; i++) {
-            phones[i] = old_phones[i];
+            phones[i] = temp_phones[i];
         }
 
+        // push new phone info in array
         phones[size].name = name;
         phones[size].brand = brand;
         phones[size].os = OS::OS_NULL;
@@ -338,8 +342,11 @@ void add_phone(Mobile *phones, int size) {
         phones[size].sell = 0;
         phones[size].color = Color::C_NULL;
 
+        // increase array size
         size +=1;
-        delete[] old_phones;
+
+        // remove temporary array
+        delete[] temp_phones;
     }
 
     return cout_menu(phones, size);
@@ -351,7 +358,6 @@ void add_phone(Mobile *phones, int size) {
  *
  * @param name
  * @param brand
- * @param stock
  * @param phones
  * @param size
  *
@@ -368,24 +374,35 @@ void remove_phone(string name, string brand, Mobile *phones,int size) {
     }
 
     // remove phone
-    // Shifting mobiles to the left in the right position
+    // shifting mobiles to the left in the right position
     // relative to the removed mobile position
     for (int i = index + 1; i < size; ++i) {
         phones[i - 1] = phones[i];
     }
 
     // shrink array
-    Mobile *old_phones = phones;
+    // save previous array in temporary array
+    Mobile *temp_phones = phones;
+
+    // decrease array size
     size -= 1;
+
+    // create new array with new size
     phones = new Mobile[size];
+
+    // push previous phones in new array
     for(int i=0; i<size; i++) {
-        phones[i] = old_phones[i];
+        phones[i] = temp_phones[i];
     }
-    old_phones = NULL;
-    delete old_phones;
+
+    // remove temporary array
+    temp_phones = NULL;
+    delete temp_phones;
 
     // print message
     cout << "phone `" << name << "|" << brand << "` deleted successfully." << endl;
+
+    // print main menu
     return cout_menu(phones, size);
 
 }
@@ -401,13 +418,20 @@ void remove_phone(string name, string brand, Mobile *phones,int size) {
  * @return index of `phone`, or -1 if there was no `phone`.
  */
 int search(string name, string brand, Mobile *phones, int size) {
+
+    // suppose it does not exist
     int index = -1;
+
+    // Then we look for it
     for(int i=0; i<size; i++) {
         if((phones[i].name == name) && (phones[i].brand == brand)) {
+            // save the found mobile index
             index = i;
             break;
         }
     }
+
+    // return result
     return index;
 }
 
@@ -442,7 +466,7 @@ void sort_by_price(Mobile *phones, int size) {
         }
 
         // if no number was swapped that means
-        // array is sorted now, break the loop.
+        // array is sorted now, break the loop :)
         if(!swapped) {
             break;
         }
@@ -459,21 +483,25 @@ void sort_by_price(Mobile *phones, int size) {
  */
 void change_mobile_info(Mobile *phones, int size) {
 
-    // get detail from user
+    // get phone name
     string name, brand;
     cout << "Enter the phone name :" << endl;
     cin >> name;
 
+    // get phone brand
     cout << "Enter the phone brand :" << endl;
     cin >> brand;
 
+    // search phone
     int index = search(name, brand, phones, size );
 
+    // if not exists print error message
     if(index == -1) {
         cout << "error : phone not found." << endl;
         return cout_menu(phones, size);
     }
 
+    // print phone edit menu
     return edit_menu(index, phones, size);
 }
 
@@ -488,7 +516,7 @@ void edit_menu (int index, Mobile *phones, int size)
 {
     int menu;
 
-    // print edit menu for user
+    // print edit menu
     cout << "[1] OS" << endl;
     cout << "[2] Ram" << endl;
     cout << "[3] Storage" << endl;
@@ -504,7 +532,7 @@ void edit_menu (int index, Mobile *phones, int size)
 
     // handle menu
     switch(menu) {
-        case 1:
+        case 1: // edit os
             {
                 int new_value;
                 cout << "Select OS for phone `" << phones[index].name << "`." << endl;
@@ -513,7 +541,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 cout << "[3] Windows phone" << endl;
                 cin >> new_value;
 
-                // save
+                // fix Enum value
                 OS userValue = static_cast<OS>(new_value);
 
                 // prepare for next use
@@ -524,7 +552,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 phones[index].os = userValue;
                 break;
             }
-        case 2:
+        case 2: // edit ram
             {
                 int new_value;
                 cout << "Select Ram for phone `" << phones[index].name << "`." << endl;
@@ -538,6 +566,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 cout << "[8] 64GB" << endl;
                 cin >> new_value;
 
+                // fix Enum value
                 Ram userValue = static_cast<Ram>(new_value);
 
                 // prepare for next use
@@ -548,7 +577,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 phones[index].ram = userValue;
                 break;
             }
-        case 3:
+        case 3: // edit storage
             {
                 int new_value;
                 cout << "Select Storage for phone `" << phones[index].name << "`." << endl;
@@ -562,7 +591,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 cout << "[8] 2TB" << endl;
                 cin >> new_value;
 
-                // save
+                // fix Enum value
                 Storage userValue = static_cast<Storage>(new_value);
 
                 // prepare for next use
@@ -573,9 +602,8 @@ void edit_menu (int index, Mobile *phones, int size)
                 phones[index].storage = userValue;
                 break;
             }
-        case 4:
+        case 4: // edit color
             {
-                // Black, Gray, Green, Blue, White, Red, Yellow
                 int new_value;
                 cout << "Select Color for phone `" << phones[index].name << "`." << endl;
                 cout << "[1] Black" << endl;
@@ -587,7 +615,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 cout << "[7] Yellow" << endl;
                 cin >> new_value;
 
-                // save
+                // fix Enum value
                 Color userValue = static_cast<Color>(new_value);
 
                 // prepare for next use
@@ -598,7 +626,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 phones[index].color = userValue;
                 break;
             }
-        case 5:
+        case 5: // edit stock
             {
                 int new_value;
                 cout << "Enter new stock for phone `" << phones[index].name << "`." << endl;
@@ -613,10 +641,12 @@ void edit_menu (int index, Mobile *phones, int size)
                     cout << "error : stock must be number" << endl << "Enter the phone stock correctly:" << endl;
                     cin >> new_value;
                 }
+
+                // save
                 phones[index].stock = new_value;
                 break;
             }
-        case 6:
+        case 6: // edit price
             {
                 int new_value;
                 cout << "Enter new price for phone `" << phones[index].name << "`." << endl;
@@ -634,7 +664,7 @@ void edit_menu (int index, Mobile *phones, int size)
                 phones[index].price = new_value;
                 break;
             }
-        case 7:
+        case 7: // return to main menu
             return cout_menu(phones, size);
         default:
             {
@@ -643,9 +673,8 @@ void edit_menu (int index, Mobile *phones, int size)
             }
     }
 
+    // print phone edit menu
     return edit_menu(index, phones, size);
-
-
 }
 
 /**
@@ -655,22 +684,29 @@ void edit_menu (int index, Mobile *phones, int size)
  * @param size
  */
 void sell_a_mobile(Mobile *phones, int size) {
-    // get detail from user
+
+    // get phone name
     string name, brand;
     cout << "Enter the phone name :" << endl;
     cin >> name;
 
+    // get phone brand
     cout << "Enter the phone brand :" << endl;
     cin >> brand;
 
+    // look for it
     int index = search(name, brand, phones, size );
 
+    // print error if not exists
     if(index == -1) {
         cout << "error : phone not found." << endl;
         return cout_menu(phones, size);
     }
     else{
+        // decrease stock
         phones[index].stock -= 1;
+
+        // increase sell
         phones[index].sell += 1;
         cout << "Sales were registered successfully." << endl;
 
@@ -711,6 +747,8 @@ void print_phones(Mobile *phones, int size) {
  * @param size
  */
 void most_sold_item(Mobile *phones, int size) {
+
+    // copy phones in sort array
     Mobile *sorted_by_sold = phones;
 
     Mobile temp;
@@ -718,11 +756,11 @@ void most_sold_item(Mobile *phones, int size) {
 
     bool swapped = false;
 
-    // loop through all numbers
+    // loop through all phones
     if(size > 1) for(i = 0; i < size-1; i++) {
         swapped = false;
 
-        // loop through numbers falling ahead
+        // loop through sell falling ahead
         for(j = 0; j < size-1-i; j++) {
             if(sorted_by_sold[j].sell < sorted_by_sold[j+1].sell) {
                 temp = sorted_by_sold[j];
@@ -732,7 +770,7 @@ void most_sold_item(Mobile *phones, int size) {
             }
         }
 
-        // if no number was swapped that means
+        // if no phone was swapped that means
         // array is sorted now, break the loop.
         if(!swapped) {
             break;
@@ -742,7 +780,7 @@ void most_sold_item(Mobile *phones, int size) {
     // print phones sorted by sell
     print_phones(sorted_by_sold, size);
 
-    // delete extra pointer
+    // delete sorted array
     sorted_by_sold = NULL;
     delete sorted_by_sold;
 
@@ -791,53 +829,62 @@ void cout_menu(Mobile *phones, int size) {
 void handle_menu(int menu, Mobile *phones, int size) {
 
     switch(menu) {
-        case 1:
+        case 1: // add a phone
             return add_phone(phones, size);
-        case 2:
+        case 2: // remove phone
             {
                 string name, brand;
+
+                // get phone name
                 cout << "Enter the phone name :" << endl;
                 cin >> name;
 
+                // get phone brand
                 cout << "Enter the phone brand :" << endl;
                 cin >> brand;
 
+                // remove phone
                 return remove_phone(name, brand, phones, size);
             }
-        case 3:
+        case 3: // sort phones by price
             return sort_by_price(phones, size);
-        case 4:
+        case 4: //search a phone
             {
-                // get data from  user
                 string name, brand;
+
+                // get phone name
                 cout << "Enter the phone name :" << endl;
                 cin >> name;
 
+                // get phone brand
                 cout << "Enter the phone brand :" << endl;
                 cin >> brand;
 
                 // Check there is a `phone`
                 if(size) {
-                    // search and print phone
+
+                    // get phone index
                     int index = search(name, brand, phones, size );
 
                     // print message for fail result
                     if(index == -1)
                         cout << "error : phone not found." << endl;
                     else{
+                        // print phone
                         phones[index].print();
                     }
                 } else {
                     cout << "Phone has not been added yet." << endl;
                 }
 
+                // print main menu
                 return cout_menu(phones, size);
             }
-        case 5:
+        case 5: // change phone info
             return change_mobile_info(phones, size);
-        case 6:
+        case 6: //sell a phone
             return sell_a_mobile(phones, size);
-        case 7:
+        case 7: // print phones
             {
                 // print all phones
                 print_phones(phones, size);
@@ -845,9 +892,9 @@ void handle_menu(int menu, Mobile *phones, int size) {
                 // print main menu
                 return cout_menu(phones, size);
             }
-        case 8:
+        case 8: // print phones sorted by the most sold to the least
             return most_sold_item(phones, size);
-        case 9:
+        case 9: //exit
             {
                 save_into_a_file(phones, size);
                 cout << "<<<<--THANK YOU-->>>>" << endl;

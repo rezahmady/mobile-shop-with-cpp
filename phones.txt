@@ -1,3 +1,4 @@
-2
-Galexy_s7	Samsung	0	0	0	749	0	1	0	
+3
+iphonX	apple	1	12	4	3998	40000000	2	1	
 G9	LG	2	6	5	350	8900000	0	7	
+Galexy_s7	Samsung	0	0	0	749	0	1	0	
