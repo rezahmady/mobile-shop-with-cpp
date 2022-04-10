@@ -156,7 +156,7 @@ void save_into_a_file(Mobile *phones, int size)
  */
 void load_from_a_file(Mobile *phones, int size)
 {
-    int os_value, ram_value,storage_value,color_value;
+    int os_in_file, ram_in_file,storage_in_file,color_in_file;
 
     ifstream myfile("phones.txt");
     if (!myfile.is_open()) {
@@ -174,19 +174,19 @@ void load_from_a_file(Mobile *phones, int size)
         myfile
           >> phones[i].name
           >> phones[i].brand
-          >> os_value
-          >> ram_value
-          >> storage_value
+          >> os_in_file
+          >> ram_in_file
+          >> storage_in_file
           >> phones[i].stock
           >> phones[i].price
           >> phones[i].sell
-          >> color_value ;
+          >> color_in_file ;
 
         // Enum
-        OS os_value = static_cast<OS>(os_value);
-        Ram ram_value = static_cast<Ram>(ram_value);
-        Storage storage_value = static_cast<Storage>(storage_value);
-        Color color_value = static_cast<Color>(color_value);
+        OS os_value = static_cast<OS>(os_in_file);
+        Ram ram_value = static_cast<Ram>(ram_in_file);
+        Storage storage_value = static_cast<Storage>(storage_in_file);
+        Color color_value = static_cast<Color>(color_in_file);
 
         phones[i].os = os_value;
         phones[i].ram = ram_value;
@@ -257,7 +257,7 @@ void add_phone(Mobile *phones, int size) {
     if(size == 0) {
         phones = new Mobile[1];
         phones[0].name = name;
-        phones[0].brand = name;
+        phones[0].brand = brand;
         phones[0].os = OS::OS_NULL;
         phones[0].ram = Ram::R_NULL;
         phones[0].storage = Storage::S_NULL;
@@ -274,7 +274,7 @@ void add_phone(Mobile *phones, int size) {
         }
 
         phones[size].name = name;
-        phones[size].brand = name;
+        phones[size].brand = brand;
         phones[size].os = OS::OS_NULL;
         phones[size].ram = Ram::R_NULL;
         phones[size].storage = Storage::S_NULL;
@@ -628,18 +628,18 @@ void print_phones(Mobile *phones, int size) {
 
         // print array in readable format
         for (int j=0;j< size; j++) {
-            cout << "-----------------------"             << endl;
-            cout <<  "::" << j << "::"                    << endl;
-            cout << "name  "  << " | " << phones[j].name  << endl;
-            cout << "brand "  << " | " << phones[j].brand << endl;
-            cout << "brand "  << " | " << phones[j].os << endl;
-            cout << "brand "  << " | " << phones[j].ram << endl;
-            cout << "brand "  << " | " << phones[j].storage << endl;
-            cout << "stock "  << " | " << phones[j].stock << endl;
-            cout << "price "  << " | " << phones[j].price << endl;
-            cout << "sell  "  << " | " << phones[j].sell  << endl;
-            cout << "sell  "  << " | " << phones[j].color  << endl;
-            cout << "-----------------------"             << endl;
+            cout << "-----------------------"                 << endl;
+            cout << "::"        << j     << "::"              << endl;
+            cout << "name    "  << " | " << phones[j].name    << endl;
+            cout << "brand   "  << " | " << phones[j].brand   << endl;
+            cout << "os      "  << " | " << phones[j].os      << endl;
+            cout << "ram     "  << " | " << phones[j].ram     << endl;
+            cout << "storage "  << " | " << phones[j].storage << endl;
+            cout << "stock   "  << " | " << phones[j].stock   << endl;
+            cout << "price   "  << " | " << phones[j].price   << endl;
+            cout << "sell    "  << " | " << phones[j].sell    << endl;
+            cout << "color   "  << " | " << phones[j].color   << endl;
+            cout << "-----------------------"                 << endl;
         }
 
     } else {
@@ -666,18 +666,18 @@ void print_a_phone(string name, string brand, Mobile *phones, int size) {
         if(index == -1)
             cout << "error : phone not found." << endl;
         else{
-            cout << "-----------------------"                 << endl;
-            cout <<  "::" << index << "::"                    << endl;
-            cout << "name  "  << " | " << phones[index].name  << endl;
-            cout << "brand "  << " | " << phones[index].brand << endl;
-            cout << "brand "  << " | " << phones[index].os << endl;
-            cout << "brand "  << " | " << phones[index].ram << endl;
-            cout << "brand "  << " | " << phones[index].storage << endl;
-            cout << "stock "  << " | " << phones[index].stock << endl;
-            cout << "price "  << " | " << phones[index].price << endl;
-            cout << "sell  "  << " | " << phones[index].sell  << endl;
-            cout << "sell  "  << " | " << phones[index].color  << endl;
-            cout << "-----------------------"                 << endl;
+            cout << "-----------------------"                     << endl;
+            cout << "::"        << index << "::"                  << endl;
+            cout << "name    "  << " | " << phones[index].name    << endl;
+            cout << "brand   "  << " | " << phones[index].brand   << endl;
+            cout << "os      "  << " | " << phones[index].os      << endl;
+            cout << "ram     "  << " | " << phones[index].ram     << endl;
+            cout << "storage "  << " | " << phones[index].storage << endl;
+            cout << "stock   "  << " | " << phones[index].stock   << endl;
+            cout << "price   "  << " | " << phones[index].price   << endl;
+            cout << "sell    "  << " | " << phones[index].sell    << endl;
+            cout << "color   "  << " | " << phones[index].color   << endl;
+            cout << "-----------------------"                     << endl;
         }
     } else {
         cout << "Phone has not been added yet." << endl;
