@@ -1,4 +1,0 @@
-3
-rr	aa	23	0	0	
-tt	ll	98	0	1	
-rtt	jklh	8	0	0	
