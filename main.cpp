@@ -183,16 +183,17 @@ void save_into_a_file(Mobile *phones, int size)
         if(size > 0) {
             myfile << size << endl;
             for(int row = 0; row < size; row ++){
-                myfile << phones[row].name     << "\t" ;
-                myfile << phones[row].brand    << "\t" ;
-                myfile << phones[row].os       << "\t" ;
-                myfile << phones[row].ram      << "\t" ;
-                myfile << phones[row].storage  << "\t" ;
-                myfile << phones[row].stock    << "\t" ;
-                myfile << phones[row].price    << "\t" ;
-                myfile << phones[row].sell     << "\t" ;
-                myfile << phones[row].color    << "\t" ;
-                myfile << endl ;
+                myfile
+                    << phones[row].name     << "\t"
+                    << phones[row].brand    << "\t"
+                    << phones[row].os       << "\t"
+                    << phones[row].ram      << "\t"
+                    << phones[row].storage  << "\t"
+                    << phones[row].stock    << "\t"
+                    << phones[row].price    << "\t"
+                    << phones[row].sell     << "\t"
+                    << phones[row].color    << "\t"
+                    << endl ;
             }
         }
         myfile.close();
