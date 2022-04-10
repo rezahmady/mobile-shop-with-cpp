@@ -127,7 +127,6 @@ string Mobile::display_color() {
 
 // functions
 bool compareTwoPhonesBySell(Mobile a, Mobile b, Mobile *phones, int size);
-void print_a_phone(string name, string brand, Mobile *phones, int size);
 void remove_phone(string name, string brand, Mobile *phones, int size);
 int  search(string name, string brand, Mobile *phones, int size);
 void handle_menu(int menu, Mobile *phones, int size);
@@ -572,6 +571,7 @@ void edit_menu (int index, Mobile *phones, int size)
 
                 // save
                 phones[index].storage = userValue;
+                break;
             }
         case 4:
             {
@@ -673,7 +673,12 @@ void sell_a_mobile(Mobile *phones, int size) {
         phones[index].stock -= 1;
         phones[index].sell += 1;
         cout << "Sales were registered successfully." << endl;
-        return print_a_phone(name, brand, phones, size);
+
+        // print phone
+        phones[index].print();
+
+        // print main menu
+        return cout_menu(phones, size);
     }
 }
 
@@ -697,34 +702,6 @@ void print_phones(Mobile *phones, int size) {
     } else {
         cout << "Phone has not been added yet." << endl;
     }
-}
-
-/**
- * Print a `phone`.
- *
- * @param name
- * @param brand
- * @param stock * @param name
- * @param brand
- * @param stock
- *
- */
-void print_a_phone(string name, string brand, Mobile *phones, int size) {
-
-    // Check there is a `phone`
-    if(size) {
-        int index = search(name, brand, phones, size );
-
-        if(index == -1)
-            cout << "error : phone not found." << endl;
-        else{
-            phones[index].print();
-        }
-    } else {
-        cout << "Phone has not been added yet." << endl;
-    }
-
-    return cout_menu(phones, size);
 }
 
 /**
@@ -839,8 +816,22 @@ void handle_menu(int menu, Mobile *phones, int size) {
                 cout << "Enter the phone brand :" << endl;
                 cin >> brand;
 
-                // search and print phone
-                return print_a_phone(name, brand, phones, size);
+                // Check there is a `phone`
+                if(size) {
+                    // search and print phone
+                    int index = search(name, brand, phones, size );
+
+                    // print message for fail result
+                    if(index == -1)
+                        cout << "error : phone not found." << endl;
+                    else{
+                        phones[index].print();
+                    }
+                } else {
+                    cout << "Phone has not been added yet." << endl;
+                }
+
+                return cout_menu(phones, size);
             }
         case 5:
             return change_mobile_info(phones, size);
@@ -856,7 +847,6 @@ void handle_menu(int menu, Mobile *phones, int size) {
             }
         case 8:
             return most_sold_item(phones, size);
-            break;
         case 9:
             {
                 save_into_a_file(phones, size);
