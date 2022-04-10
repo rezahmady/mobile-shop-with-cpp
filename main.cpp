@@ -76,7 +76,54 @@ struct Mobile
     int price;
     int sell;
     Color color;
+
+    // functions
+    void print();
+    string display_os();
+    string display_ram();
+    string display_storage();
+    string display_color();
 };
+
+// print mobile details
+void Mobile::print() {
+    cout << "-----------------------"                 << endl;
+    cout << "name    "  << " | " << name              << endl;
+    cout << "brand   "  << " | " << brand             << endl;
+    cout << "os      "  << " | " << display_os()      << endl;
+    cout << "ram     "  << " | " << display_ram()     << endl;
+    cout << "storage "  << " | " << display_storage() << endl;
+    cout << "stock   "  << " | " << stock             << endl;
+    cout << "price   "  << " | " << price             << endl;
+    cout << "sell    "  << " | " << sell              << endl;
+    cout << "color   "  << " | " << display_color()   << endl;
+    cout << "-----------------------"                 << endl;
+
+}
+
+// display readable value for OS
+string Mobile::display_os() {
+    string labels[4] = {"-", "iOS", "Android", "WindowsPhone"};
+    return labels[os];
+}
+
+// display readable value for Ram
+string Mobile::display_ram() {
+    string labels[9] = {"-", "2GB", "4GB", "6GB", "8GB", "12GB", "16GB", "32GB", "32GB"};
+    return labels[ram];
+}
+
+// display readable value for Strorage
+string Mobile::display_storage() {
+    string labels[9] = {"-", "16GB", "32GB", "64GB", "128GB", "256GB", "512GB", "1TB", "2TB"};
+    return labels[storage];
+}
+
+// display readable value for Color
+string Mobile::display_color() {
+    string labels[9] = {"-", "Black", "Gray", "Green", "Blue", "White", "Red", "Yellow"};
+    return labels[color];
+}
 
 // functions
 bool compareTwoPhonesBySell(Mobile a, Mobile b, Mobile *phones, int size);
@@ -95,13 +142,22 @@ void print_phones(Mobile *phones, int size);
 void add_phone(Mobile *phones, int size);
 void cout_menu(Mobile *phones, int size);
 
+/**
+ * App start
+ *
+ */
 int main()
 {
+    // initials size of phones array
+    // It basically stores the number of phones
     int size = 0;
     int *s = nullptr;
 
-    // call menu
+    // An array containing all mobiles
     Mobile *phones ;
+
+    // load saved phones from file
+    // then print main menu
     load_from_a_file(phones, size);
 
     // delete pointers
@@ -422,6 +478,13 @@ void change_mobile_info(Mobile *phones, int size) {
     return edit_menu(index, phones, size);
 }
 
+/**
+ * Handle menu for change `phone` details.
+ *
+ * @param index
+ * @param phones
+ * @param size
+ */
 void edit_menu (int index, Mobile *phones, int size)
 {
     int menu;
@@ -628,18 +691,7 @@ void print_phones(Mobile *phones, int size) {
 
         // print array in readable format
         for (int j=0;j< size; j++) {
-            cout << "-----------------------"                 << endl;
-            cout << "::"        << j     << "::"              << endl;
-            cout << "name    "  << " | " << phones[j].name    << endl;
-            cout << "brand   "  << " | " << phones[j].brand   << endl;
-            cout << "os      "  << " | " << phones[j].os      << endl;
-            cout << "ram     "  << " | " << phones[j].ram     << endl;
-            cout << "storage "  << " | " << phones[j].storage << endl;
-            cout << "stock   "  << " | " << phones[j].stock   << endl;
-            cout << "price   "  << " | " << phones[j].price   << endl;
-            cout << "sell    "  << " | " << phones[j].sell    << endl;
-            cout << "color   "  << " | " << phones[j].color   << endl;
-            cout << "-----------------------"                 << endl;
+            phones[j].print();
         }
 
     } else {
@@ -666,18 +718,7 @@ void print_a_phone(string name, string brand, Mobile *phones, int size) {
         if(index == -1)
             cout << "error : phone not found." << endl;
         else{
-            cout << "-----------------------"                     << endl;
-            cout << "::"        << index << "::"                  << endl;
-            cout << "name    "  << " | " << phones[index].name    << endl;
-            cout << "brand   "  << " | " << phones[index].brand   << endl;
-            cout << "os      "  << " | " << phones[index].os      << endl;
-            cout << "ram     "  << " | " << phones[index].ram     << endl;
-            cout << "storage "  << " | " << phones[index].storage << endl;
-            cout << "stock   "  << " | " << phones[index].stock   << endl;
-            cout << "price   "  << " | " << phones[index].price   << endl;
-            cout << "sell    "  << " | " << phones[index].sell    << endl;
-            cout << "color   "  << " | " << phones[index].color   << endl;
-            cout << "-----------------------"                     << endl;
+            phones[index].print();
         }
     } else {
         cout << "Phone has not been added yet." << endl;
