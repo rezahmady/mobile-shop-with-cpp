@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <limits>
-#include<string>
+#include <string>
 #include <fstream>
 #include <algorithm>
 
@@ -146,7 +146,7 @@ void cout_menu(Mobile *phones, int size);
  */
 int main()
 {
-    // initialise size of phones array
+    // initialize size of phones array
     // It basically stores the number of phones
     int size = 0;
     int *s = nullptr;
